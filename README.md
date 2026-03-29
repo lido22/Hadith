@@ -1,10 +1,16 @@
 ---
-title: Hadith
-emoji: 🚀
-colorFrom: blue
-colorTo: yellow
-sdk: docker
-pinned: false
----
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+
+---
+# Create Virtual Environment
+
+```
+python -m venv .venv
+./.venv/Scripts/activate
+```
+
+# Install Dependencies
+
+```
+pip install -r requirements.txt
+```
