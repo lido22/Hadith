@@ -2,15 +2,17 @@ import sqlite3
 from sqlite_vec import serialize_float32
 import json 
 import math
+from pathlib import Path
 
 
+BASE_DIR = Path(__file__).parent  # current directory
 
 
-# now connect
+# Start connection
 conn = sqlite3.connect("hadith_embeddings.db")
 cur = conn.cursor()
 
-# 2️⃣ Create table (only once)
+# Create Table 
 cur.execute("""
 CREATE TABLE IF NOT EXISTS hadiths (
     id INTEGER PRIMARY KEY,
@@ -35,17 +37,17 @@ CREATE TABLE IF NOT EXISTS hadiths (
 """)
 conn.commit()
 
-# 3️⃣ Load JSON
-with open("bukhari_GPT_embeddings_v2.json", "r", encoding="utf-8") as f:
+# Load JSON
+with open(BASE_DIR / "../bukhari_GPT_embeddings_v2.json", "r", encoding="utf-8") as f:
     hadiths = json.load(f)
 
-# 4️⃣ Clean NaNs
+# Clean NaNs
 for h in hadiths:
     for k, v in h.items():
         if isinstance(v, float) and math.isnan(v):
             h[k] = None
 
-# 5️⃣ Insert all rows in a loop
+# Insert all rows in a loop
 for h in hadiths:
     cur.execute("""
     INSERT OR REPLACE INTO hadiths (
@@ -75,7 +77,7 @@ for h in hadiths:
         serialize_float32(h["embeddings"])
     ))
 
-# 6️⃣ Commit once at the end
+# Commit once at the end
 conn.commit()
 conn.close()
 

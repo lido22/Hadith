@@ -1,10 +1,15 @@
 import sqlite3
-import json
 from sqlite_vec import serialize_float32
 import sqlite_vec
-import time
-import arabic_reshaper
+import json
+import time # Timing
+from pathlib import Path # Standardizing Path
+# Arabic printing
+import arabic_reshaper 
 from bidi.algorithm import get_display
+
+BASE_DIR = Path(__file__).parent  # current directory
+
 
 conn = sqlite3.connect("hadith_embeddings.db")
 conn.row_factory = sqlite3.Row 
@@ -15,7 +20,7 @@ conn.enable_load_extension(False)
 cur = conn.cursor()
 
 # Importing a hadith
-with open("bukhari_GPT_embeddings_v2.json", "r", encoding="utf-8") as f:
+with open(BASE_DIR / "../bukhari_GPT_embeddings_v2.json", "r", encoding="utf-8") as f:
     hadiths = json.load(f)
 
 query_embedding = hadiths[4]['embeddings']
